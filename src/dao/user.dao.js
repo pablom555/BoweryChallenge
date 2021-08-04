@@ -1,4 +1,5 @@
 const User = require('./../schemas/user');
+const Role = require('./../schemas/role');
 
 async function saveUser (userData) {
   const user = new User();
@@ -10,6 +11,11 @@ async function saveUser (userData) {
   return user.save();
 }
 
+async function getUser (filter) {
+  return User.findOne(filter).populate('role', ['role']);
+}
+
 module.exports = {
-  saveUser
+  saveUser,
+  getUser
 }

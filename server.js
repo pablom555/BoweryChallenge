@@ -24,6 +24,8 @@ app.use((req, res, next) => {
   next();
 });
 
+app.use('/api/v1', require('./src/routes'));
+
 console.log('Starting Server...');
 
 // BBDD Conection
