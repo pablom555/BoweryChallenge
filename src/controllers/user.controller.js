@@ -1,3 +1,4 @@
+const Joi = require('joi');
 const UserService = require('./../services/user.service');
 const { JoiSignIn, JoiSignUp  } = require('./../helpers/validation/user');
 
@@ -37,7 +38,39 @@ async function signUp(req, res) {
   }
 }
 
+async function getUsers(req, res) {
+  try {
+
+    const usersDB = await UserService.getAllUsers();
+
+    return res.status(200).send(usersDB);
+    
+  } catch (error) {    
+    return res.status(500).send(`Error: ${error.message}`);
+  }
+}
+
+async function getUser(req, res) {
+  try {
+
+    const { id } = req.params;
+
+    const { error } = Joi.string().required().validate(id);
+    if (error) return res.status(400).send(`Bad request, ${error.message}`);
+
+    const usersDB = await UserService.getUser(id);
+    if (!usersDB) return res.status(404).send('User Not Found');
+
+    return res.status(200).send(usersDB);
+    
+  } catch (error) {    
+    return res.status(500).send(`Error: ${error.message}`);
+  }
+}
+
 module.exports = {
   signIn,
-  signUp
+  signUp,
+  getUsers,
+  getUser
 };

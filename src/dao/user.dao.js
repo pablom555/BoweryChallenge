@@ -19,8 +19,13 @@ async function getUserByID (userID) {
   return User.findById(userID).populate('role', ['role']);
 }
 
+async function getUsers (filter) {
+  return User.find(filter).populate('role', ['role']);
+}
+
 module.exports = {
   saveUser,
   getUser,
-  getUserByID
+  getUserByID,
+  getUsers
 }

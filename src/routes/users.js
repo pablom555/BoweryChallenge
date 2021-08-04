@@ -10,4 +10,8 @@ api.use(AuthMiddleware.authenticate);
 
 api.post('/', AuthMiddleware.isAdmin, UserController.signUp);
 
+api.get('/', AuthMiddleware.isAdmin, UserController.getUsers);
+
+api.get('/:id', AuthMiddleware.isAdmin, UserController.getUser);
+
 module.exports = api;

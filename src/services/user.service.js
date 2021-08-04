@@ -39,8 +39,14 @@ async function signUp(userData) {
   return userCreated
 }
 
+async function getAllUsers(userID) {
+  const usersDB = await UserDao.getUsers();
+  return usersDB;
+}
+
 module.exports = {
   signIn,
   getUser,
-  signUp
+  signUp,
+  getAllUsers
 }
