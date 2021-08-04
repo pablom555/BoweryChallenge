@@ -49,10 +49,21 @@ async function deleteUser(userID) {
   return userDeleted
 }
 
+async function updateUser(userData) { 
+  const { role } = userData;
+
+  const roleDB = await RoleDao.getRoleByID(role);
+  if (!roleDB) throw new Error('Invalid Role');
+
+  const userUpdated = await UserDao.updateUser(userData)
+  return userUpdated
+}
+
 module.exports = {
   signIn,
   getUser,
   signUp,
   getAllUsers,
-  deleteUser
+  deleteUser,
+  updateUser
 }

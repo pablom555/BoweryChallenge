@@ -27,10 +27,22 @@ async function deleteUser (userID) {
   return User.findByIdAndDelete(userID);
 }
 
+async function updateUser (userData) {
+  const {id, password, ...rest} = userData;
+  return User.findByIdAndUpdate(id, rest, { new: true },
+    (err, doc) => {
+      if (err) throw new Error(err);
+      doc.password = password;
+      return doc.save();
+    },
+  ).exec();
+}
+
 module.exports = {
   saveUser,
   getUser,
   getUserByID,
   getUsers,
-  deleteUser
+  deleteUser,
+  updateUser
 }

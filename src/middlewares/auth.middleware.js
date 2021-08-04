@@ -37,6 +37,15 @@ class AuthMiddleware {
   
     next();
   }
+
+  static isEndUserOrAdmin(req, res, next) {
+    const { user } = req.auth;
+    
+    if (user.role.role !== 'End-User' && user.role.role !== 'Admin')
+      return res.status(403).send('The User must be End-User or Admin')
+  
+    next();
+  } 
   
 }
 

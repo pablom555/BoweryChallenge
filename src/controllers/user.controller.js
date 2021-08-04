@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const UserService = require('./../services/user.service');
-const { JoiSignIn, JoiSignUp  } = require('./../helpers/validation/user');
+const { JoiSignIn, JoiSignUp, JoiUpdate  } = require('./../helpers/validation/user');
 
 async function signIn(req, res) {
   try {
@@ -89,10 +89,46 @@ async function deleteUser(req, res) {
   }
 }
 
+async function getUserInfo(req, res) {
+  try {
+
+    const { user:  {_id: id } } = req.auth;
+
+    const usersDB = await UserService.getUser(id);
+    if (!usersDB) return res.status(404).send('User Not Found');
+
+    return res.status(200).send(usersDB);
+    
+  } catch (error) {    
+    return res.status(500).send(`Error: ${error.message}`);
+  }
+}
+
+async function updateUser(req, res) {
+  try {
+
+    const { user:  {_id: id } } = req.auth;
+    const updatePayload = req.body;
+
+    const { error } = JoiUpdate.validate(updatePayload);
+    if (error) return res.status(400).send(`Bad request, ${error.message}`);
+
+    const usersDB = await UserService.updateUser({id, ...updatePayload});
+    if (!usersDB) return res.status(404).send('User Not Found');
+
+    return res.status(200).send(usersDB);
+    
+  } catch (error) {    
+    return res.status(500).send(`Error: ${error.message}`);
+  }
+}
+
 module.exports = {
   signIn,
   signUp,
   getUsers,
   getUser,
-  deleteUser
+  deleteUser,
+  getUserInfo,
+  updateUser
 };
