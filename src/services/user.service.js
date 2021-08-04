@@ -1,4 +1,5 @@
 const UserDao = require('./../dao/user.dao');
+const RoleDao = require('./../dao/role.dao');
 const TokenService = require('./../services/token.service');
 const { SECRET_JWT } = require('./../config/constants.config')
 
@@ -23,6 +24,23 @@ async function signIn(email, password) {
 
 }
 
+async function getUser(userID) {
+  const userDB = await UserDao.getUserByID(userID);
+  return userDB;
+}
+
+async function signUp(userData) { 
+  const { role } = userData;
+
+  const roleDB = await RoleDao.getRoleByID(role);
+  if (!roleDB) throw new Error('Invalid Role');
+
+  const userCreated = await UserDao.saveUser(userData)
+  return userCreated
+}
+
 module.exports = {
-  signIn
+  signIn,
+  getUser,
+  signUp
 }

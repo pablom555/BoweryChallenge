@@ -6,6 +6,11 @@ async function saveRole (roleData) {
   return newRole.save();
 }
 
+async function getRoleByID (roleID) {
+  return Role.findById(roleID);
+}
+
 module.exports = {
-  saveRole
+  saveRole,
+  getRoleByID
 }

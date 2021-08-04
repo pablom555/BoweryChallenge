@@ -1,5 +1,5 @@
 const UserService = require('./../services/user.service');
-const { JoiSignIn  } = require('./../helpers/validation/user');
+const { JoiSignIn, JoiSignUp  } = require('./../helpers/validation/user');
 
 async function signIn(req, res) {
   try {
@@ -19,6 +19,25 @@ async function signIn(req, res) {
   }
 }
 
+async function signUp(req, res) {
+  try {
+
+    const signUpPayload = req.body;
+
+    const { error }  = JoiSignUp.validate(signUpPayload);
+    if (error) return res.status(400).send(`Bad request, ${error.message}`);
+
+    const userCreated = await UserService.signUp(signUpPayload);
+    if (!userCreated) throw new Error('Error creating user')
+
+    return res.status(201).send(userCreated);
+    
+  } catch (error) {    
+    return res.status(500).send(`Error: ${error.message}`);
+  }
+}
+
 module.exports = {
-  signIn
+  signIn,
+  signUp
 };

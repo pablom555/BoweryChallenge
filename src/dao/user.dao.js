@@ -15,7 +15,12 @@ async function getUser (filter) {
   return User.findOne(filter).populate('role', ['role']);
 }
 
+async function getUserByID (userID) {
+  return User.findById(userID).populate('role', ['role']);
+}
+
 module.exports = {
   saveUser,
-  getUser
+  getUser,
+  getUserByID
 }
