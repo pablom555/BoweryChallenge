@@ -44,9 +44,15 @@ async function getAllUsers(userID) {
   return usersDB;
 }
 
+async function deleteUser(userID) { 
+  const userDeleted = await UserDao.deleteUser(userID)
+  return userDeleted
+}
+
 module.exports = {
   signIn,
   getUser,
   signUp,
-  getAllUsers
+  getAllUsers,
+  deleteUser
 }

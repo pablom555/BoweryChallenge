@@ -23,9 +23,14 @@ async function getUsers (filter) {
   return User.find(filter).populate('role', ['role']);
 }
 
+async function deleteUser (userID) {
+  return User.findByIdAndDelete(userID);
+}
+
 module.exports = {
   saveUser,
   getUser,
   getUserByID,
-  getUsers
+  getUsers,
+  deleteUser
 }

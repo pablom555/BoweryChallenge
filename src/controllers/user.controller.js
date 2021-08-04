@@ -68,9 +68,31 @@ async function getUser(req, res) {
   }
 }
 
+async function deleteUser(req, res) {
+  try {
+
+    const { user:  {_id: ownId } } = req.auth;
+    const { id } = req.params;
+
+    const { error } = Joi.string().required().validate(id);
+    if (error) return res.status(400).send(`Bad request, ${error.message}`);
+
+    if (id == ownId) throw new Error('You cannot delete your own user');
+
+    const usersDB = await UserService.deleteUser(id);
+    if (!usersDB) return res.status(404).send('User Not Found');
+
+    return res.status(204).send('User deleted successfully');
+    
+  } catch (error) {    
+    return res.status(500).send(`Error: ${error.message}`);
+  }
+}
+
 module.exports = {
   signIn,
   signUp,
   getUsers,
-  getUser
+  getUser,
+  deleteUser
 };
